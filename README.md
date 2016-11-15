@@ -20,7 +20,7 @@ Created for the purpose of storing test components of Coap-protocol-integration
 **At the moment only `GET` requests are properly handled and those requests must be send as `POST`** _because `GET` dosen't allow a authentication payload (will figure some alternative way)_
 Eg: 
 
-1. Send a `GET` request to `rd/raspberrypi/1.0.0/device/stats/{deviceId}` (originaly a `GET` request) 
+1. Send a `POST` request to `rd/raspberrypi/1.0.0/device/stats/{deviceId}` with a value to {deviceId} (originaly a `GET` request) 
 2. Set payload as `Header{Authorization="Bearer c455a0d8aebc23875b13f1d9ccbd62bf"}` 
 
 If everything works IoT Server, where devices are currently enrolled, will send a `Unautherized` response code with _invalid access token_ payload.
