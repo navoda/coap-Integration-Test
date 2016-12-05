@@ -1,26 +1,84 @@
 # Coap-Integration-Test
-Created for the purpose of storing test components of Coap-protocol-integration
+Created for the purpose of storing test components of Coap-integration
 
-### components
-1. [carbon-device-mgt-plugins](https://github.com/navoda/carbon-device-mgt-plugins/tree/coap-protocol-integration) - `branch coap-protocol-integration`
-2. [carbon-device-mgt](https://github.com/navoda/carbon-device-mgt/tree/coap-v1.1.0) - `branch coap-v1.1.0`
+## Components 
+
+### WSO2 CoAP Input Adapter
+[carbon-device-mgt-plugins](https://github.com/navoda/carbon-device-mgt-plugins/tree/coap-integration-release-3.0.x/components/extensions/cdmf-transport-adapters/input/org.wso2.carbon.device.mgt.input.adapter.coap) - `branch coap-integration-release-3.0.x`
+
+The basic component of the integration. It is a component of WSO2 input adapters and also a trasportation interface, created to communicate with WSO2 IoT server via [CoAP (Constrained Application Protocol)](https://tools.ietf.org/html/rfc7252). This interface implementation, is based on CoRE [RD (Resource Directory)](https://tools.ietf.org/html/draft-ietf-core-resource-directory-08) concept which register the basic WSO2 IoT device API architecture and allows to send REST messages to/from enrolled devices in WSO2 IoT server. 
+
+### Modified WSO2 Webapp-Publisher
+[carbon-device-mgt](https://github.com/navoda/carbon-device-mgt/tree/coap-integration-2.0.x/components/apimgt-extensions/org.wso2.carbon.apimgt.webapp.publisher) - `coap-integration-2.0.x`
+
+This modification is used to send register requests from every device API in device-plugin to CoAP RD (Resource Directory) during the server startup. A **Resource Directory Client** is implemented to send these requests. 
+
+### Californium Libraries
+1. [californium-core](https://github.com/eclipse/californium-core)
+2. [californium-proxy](https://github.com/eclipse/californium-proxy)
 3. [californium.tools](https://github.com/navoda/californium.tools/tree/modifyRDNodeResource) - `branch modifyRDNodeResource`
-4. [californium](https://github.com/eclipse/californium) - `master`
 
 ## Initialization instructions
 
-1. use `wso2iots-1.0.0-alpha` as the server
-2. `dropins` -  [org.wso2.carbon.device.mgt.iot.input.adapter.coap-2.1.3-SNAPSHOT.jar](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.device.mgt.iot.input.adapter.coap-2.1.3-SNAPSHOT.jar)
-3. `patches` - [org.wso2.carbon.apimgt.webapp.publisher-1.1.0.jar](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.apimgt.webapp.publisher-1.1.0.jar)
-4. `lib` - [californium_proxy_1.1.0_SNAPSHOT_1.0.0.jar] (https://github.com/navoda/coap-Integration-Test/blob/master/californium_proxy_1.1.0_SNAPSHOT_1.0.0.jar) and [cf-rd-1.1.0-SNAPSHOT.jar](https://github.com/navoda/coap-Integration-Test/blob/master/cf-rd-1.1.0-SNAPSHOT.jar)
-5. run wso2server.sh
-6. open **Copper (Cu)** firefox plugin and `GET` the _well-known-core_. Once the content finished download it will show the tree view of current **RD**(Resource Directory)
+### Copper(Cu)
+[Copper](http://people.inf.ethz.ch/mkovatsc/copper.php) is a firefox plugin, which used as a CoAP end-client. install it into fiefox using this link [https://addons.mozilla.org/en-US/firefox/addon/copper-270430/](https://addons.mozilla.org/en-US/firefox/addon/copper-270430/)
 
-## Send a Request
-**At the moment only `GET` requests are properly handled and those requests must be send as `POST`** _because `GET` dosen't allow a authentication payload (will figure some alternative way)_
-Eg: 
+### WSO2 Server
+Before starting the WSO2 IoT server please add mentioned files into following locations.
 
-1. Send a `POST` request to `rd/raspberrypi/1.0.0/device/stats/{deviceId}` with a value to {deviceId} (originaly a `GET` request) 
-2. Set payload as `Header{Authorization="Bearer c455a0d8aebc23875b13f1d9ccbd62bf"}` 
+#### dropins 
+(core/repository/components/dropins)
+adapter
 
-If everything works IoT Server, where devices are currently enrolled, will send a `Unautherized` response code with _invalid access token_ payload.
+#### patches
+(core/repository/components/patches)
+publisher
+ 
+#### lib
+1. cf-rd
+2. cf-proxy
+3. jackson-core
+4. jackson-mapper
+
+## Test
+Run _broker/wso2server.sh_ and _core/wso2server.sh_
+
+Open **Copper (Cu)** firefox plugin in coap default port **5683** and click `Discover` (or `GET` the _well-known-core_). Once the content finished download it will show the tree view of current **RD**(Resource Directory) with WSO2 device APIs
+
+### REST Methods
+Hover the mouse pointer on the **end Resource** to see the type of method `GET/POST/PUT/DELETE`is allowed to pass.
+_**Important: Even a resource only allowed a `GET` method, it is recommended to send a `POST` for that, if a header should be attached in the message**_ 
+
+### Set URI
+click the end resource to get the **URI** to the URI-bar. Before sending it, make sure to set appropriate values in the locations of dynamic resources.
+
+E.g: if the _**deviceId**_ of a raspberrypi device is `uvgzi62oz2go`, set the `{deviceId}` in `coap://localhost:5683/rd/raspberrypi/device/{deviceId}/bulb`  as `coap://localhost:5683/rd/raspberrypi/device/uvgzi62oz2go/bulb` 
+
+### Set Message
+use the outgoing tab to write a message.
+If specific headers and body should be attached, use following _json_ format to write a message
+
+`{"header":{/*headers_and_values*/},body:body_text}`
+
+### Send Message
+Send the messgae using appropriate REST method buttons. [see Copper(Cu) usage](http://people.inf.ethz.ch/mkovatsc/copper.php/usage)
+
+### virtual-firealarm Example
+
+1. Before starting the server, replace the virtual_firealarm.war file of virtual_firealarm webapp folder in (core/repository/components/features) with the virtual_firealarm.war in this repository.
+2. Follow the above initialization instructions and start the servers.
+3. Enroll a new virtual-firealarm from [https://localhost:9443/devicemgt](https://localhost:9443/devicemgt). Downlaod and start the agent.
+4. Start Copper(Cu) and get the wel_known_core
+5. Get the device_id of the firealarm and access token.
+6. Click the virtual-firealarm `buzz` end-Resource and get `coap://localhost:5683/rd/virtual_firealarm/device/{deviceId}/buzz` to the URI bar
+7. set the outgoing message to (if device_id is `uvgzi62oz2go` and access token is `93392003-746e-3fbd-aa79-1b2ed7a97508`)
+`{ 
+  "header":{
+     "Authorization":"Bearer 93392003-746e-3fbd-aa79-1b2ed7a97508",
+    "Content-Type":"application/x-www-form-urlencoded"
+  },
+   "body":"state=on"
+}`
+8. Send the message as a `POST`
+9. Check if the buzzer changed its' state to 'on'.
+
