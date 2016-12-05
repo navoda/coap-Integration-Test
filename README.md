@@ -88,3 +88,11 @@ Send the messgae using appropriate REST method buttons. [see Copper(Cu) usage](h
 8. Send the message as a `POST`
 9. Check if the buzzer changed its' state to 'on'.
 
+```
+Req: POST coap://localhost:5683/rd/virtual_firealarm/device/uvgzi62oz2go/buzz
+Payload: {"header":{"Authorization":"Bearer 93392003-746e-3fbd-aa79-1b2ed7a97508","Content-Type":"application/x-www-form-urlencoded" },"body":"state=on"}
+Content-Format: application/json
+
+Res: ACK 2.05 Content
+Location: http://localhost:9763/virtual_firealarm/device/uvgzi62oz2go/buzz
+```
