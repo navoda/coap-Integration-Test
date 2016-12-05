@@ -28,17 +28,19 @@ Before starting the WSO2 IoT server please add mentioned files into following lo
 
 #### dropins 
 (core/repository/components/dropins)
-adapter
+[coap-input-adapter](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.device.mgt.input.adapter.coap-3.0.2-SNAPSHOT.jar)
 
 #### patches
 (core/repository/components/patches)
-publisher
+[webapp-publisher](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.apimgt.webapp.publisher-2.0.2-SNAPSHOT.jar)
  
 #### lib
-1. cf-rd
-2. cf-proxy
-3. jackson-core
-4. jackson-mapper
+(core/repository/components/lib)
+
+1. [cf-rd](https://github.com/navoda/coap-Integration-Test/blob/master/cf-rd-1.1.0-SNAPSHOT.jar)
+2. [cf-proxy](https://github.com/navoda/coap-Integration-Test/blob/master/californium_proxy_1.1.0_SNAPSHOT_1.0.0.jar)
+3. [jackson-core](https://github.com/navoda/coap-Integration-Test/blob/master/jackson-core-asl-1.9.0.jar)
+4. [jackson-mapper](https://github.com/navoda/coap-Integration-Test/blob/master/jackson-mapper-asl-1.9.0.jar)
 
 ## Test
 Run _broker/wso2server.sh_ and _core/wso2server.sh_
@@ -58,27 +60,31 @@ E.g: if the _**deviceId**_ of a raspberrypi device is `uvgzi62oz2go`, set the `{
 use the outgoing tab to write a message.
 If specific headers and body should be attached, use following _json_ format to write a message
 
-`{"header":{/*headers_and_values*/},body:body_text}`
+```json
+{"header":{"header_title":"value"},"body":"body_text"}
+```
 
 ### Send Message
 Send the messgae using appropriate REST method buttons. [see Copper(Cu) usage](http://people.inf.ethz.ch/mkovatsc/copper.php/usage)
 
 ### virtual-firealarm Example
 
-1. Before starting the server, replace the virtual_firealarm.war file of virtual_firealarm webapp folder in (core/repository/components/features) with the virtual_firealarm.war in this repository.
+1. Before starting the server, replace the virtual_firealarm.war file of virtual_firealarm webapp folder in (core/repository/components/features) with the [virtual_firealarm.war](https://github.com/navoda/coap-Integration-Test/blob/master/virtual_firealarm.war) in this repository.
 2. Follow the above initialization instructions and start the servers.
 3. Enroll a new virtual-firealarm from [https://localhost:9443/devicemgt](https://localhost:9443/devicemgt). Downlaod and start the agent.
 4. Start Copper(Cu) and get the wel_known_core
 5. Get the device_id of the firealarm and access token.
 6. Click the virtual-firealarm `buzz` end-Resource and get `coap://localhost:5683/rd/virtual_firealarm/device/{deviceId}/buzz` to the URI bar
 7. set the outgoing message to (if device_id is `uvgzi62oz2go` and access token is `93392003-746e-3fbd-aa79-1b2ed7a97508`)
-`{ 
+```json
+{ 
   "header":{
      "Authorization":"Bearer 93392003-746e-3fbd-aa79-1b2ed7a97508",
     "Content-Type":"application/x-www-form-urlencoded"
   },
    "body":"state=on"
-}`
+}
+```
 8. Send the message as a `POST`
 9. Check if the buzzer changed its' state to 'on'.
 
