@@ -28,19 +28,19 @@ Before starting the WSO2 IoT server please add mentioned files into following lo
 
 #### dropins 
 (core/repository/components/dropins)
-[coap-input-adapter](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.device.mgt.input.adapter.coap-3.0.2-SNAPSHOT.jar)
+[coap-input-adapter `3.0.3`](https://github.com/navoda/coap-Integration-Test/blob/master/dropins/org.wso2.carbon.device.mgt.input.adapter.coap-3.0.3-SNAPSHOT.jar)
 
 #### patches
 (core/repository/components/patches)
-[webapp-publisher](https://github.com/navoda/coap-Integration-Test/blob/master/org.wso2.carbon.apimgt.webapp.publisher-2.0.2-SNAPSHOT.jar)
+[webapp-publisher `2.0.3`](https://github.com/navoda/coap-Integration-Test/blob/master/patches/org.wso2.carbon.apimgt.webapp.publisher-2.0.3-SNAPSHOT.jar)
  
 #### lib
 (core/repository/components/lib)
 
-1. [cf-rd](https://github.com/navoda/coap-Integration-Test/blob/master/cf-rd-1.1.0-SNAPSHOT.jar)
-2. [cf-proxy](https://github.com/navoda/coap-Integration-Test/blob/master/californium_proxy_1.1.0_SNAPSHOT_1.0.0.jar)
-3. [jackson-core](https://github.com/navoda/coap-Integration-Test/blob/master/jackson-core-asl-1.9.0.jar)
-4. [jackson-mapper](https://github.com/navoda/coap-Integration-Test/blob/master/jackson-mapper-asl-1.9.0.jar)
+1. [cf-rd](https://github.com/navoda/coap-Integration-Test/blob/master/lib/cf-rd-1.1.0-SNAPSHOT.jar)
+2. [cf-proxy](https://github.com/navoda/coap-Integration-Test/blob/master/lib/californium-proxy-1.1.0-SNAPSHOT.jar)
+3. [jackson-core](https://github.com/navoda/coap-Integration-Test/blob/master/lib/jackson-core-asl-1.9.0.jar)
+4. [jackson-mapper](https://github.com/navoda/coap-Integration-Test/blob/master/lib/jackson-mapper-asl-1.9.0.jar)
 
 ## Test
 Run _broker/wso2server.sh_ and _core/wso2server.sh_
@@ -69,7 +69,7 @@ Send the messgae using appropriate REST method buttons. [see Copper(Cu) usage](h
 
 ### virtual-firealarm Example
 
-1. Before starting the server, replace the virtual_firealarm.war file of virtual_firealarm webapp folder in (core/repository/components/features) with the [virtual_firealarm.war](https://github.com/navoda/coap-Integration-Test/blob/master/virtual_firealarm.war) in this repository.
+1. Before starting the server, replace the virtual_firealarm.war file of virtual_firealarm webapp folder in (core/repository/components/features) with the [virtual_firealarm.war `3.0.3`](https://github.com/navoda/coap-Integration-Test/blob/master/features/3.0.3/virtual_firealarm.war) in this repository.
 2. Follow the above initialization instructions and start the servers.
 3. Enroll a new virtual-firealarm from [https://localhost:9443/devicemgt](https://localhost:9443/devicemgt). Downlaod and start the agent.
 4. Start Copper(Cu) and get the wel_known_core
